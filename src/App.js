@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { redirectToAuthCodeFlow } from './utilities/authorization_utilities';
-import { selectAccessToken, requestToken } from './features/authorization/authorizationSlice';
-import { createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { requestToken } from './features/authorization/authorizationSlice';
+import Posts from './features/posts/Posts';
 
 
 
 function App() {
 
-
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
+  const dispatch = useDispatch();
   const shouldUseEffect = useRef(true); //In the strict mode of React 18 an effect with useEffect seems to be called twice. 
   //To get around this, I used useRef to keep track of a boolean
 
@@ -22,20 +22,19 @@ function App() {
         //console.log("redirect");
         redirectToAuthCodeFlow();
       } else {
-        //console.log("dispatch");
         dispatch(requestToken(code));
       }
     }
   }, [])
-  
-  const dispatch = useDispatch();
-  const accessToken = useSelector(selectAccessToken);
+
+
 
 
 
   return (
     <div className="App">
       <header className="App-header">
+          <Posts />
       </header>
     </div>
   );
