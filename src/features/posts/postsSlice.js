@@ -5,14 +5,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 export const requestPosts = createAsyncThunk(
     'posts/requestPosts',
     async(lastName) => {
-
-
         let data = '';
 
         if(lastName === undefined){
-            data = await fetch(`https://www.reddit.com/r/popular/top/.json`); 
+            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=1000`); 
         }else {
-            data = await fetch(`https://www.reddit.com/r/popular/top/.json?after=${lastName}`); 
+            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=1000&after=${lastName}`); 
         }
 
         const result = await data.json();
@@ -43,20 +41,22 @@ export const postsSlice = createSlice({
                 state.requestingToken = false;
                 state.failedToGetToken = false;
                 payload.data.children.forEach(child => {
-                    console.log(child);
+                    if(!child.data.post_hint){
+                        console.log(child)
+                    }
                     state.redditposts = {
                         ...state.redditposts,
                         [child.data.id]:{
                             id: child.data.id,
                             type: (child.data.post_hint) ? child.data.post_hint : null,
-                            video: (child.data.secure_media) ? child.data.secure_media.reddit_video.fallback_url: null,
+                            video: (child.data.secure_media) ? child.data.secure_media.reddit_video.dash_url: null,
                             thumbnail: child.data.thumbnail,
                             //media: (child.data.post_hint) ? (child.data.post_hint === 'image'|| child.data.post_hint === 'link') ? child.data.url : child.data.media.reddit_video.fallback_url : undefined , //image, link, rich-video
                             title: child.data.title,
                             author: child.data.author,
                             subreddit: child.data.subreddit_name_prefixed,
                             url: child.data.url,
-                            reddit_link: child.data.permalink
+                            redditLink: child.data.permalink
                         }
                     }
                 });
@@ -75,10 +75,6 @@ export const postsSlice = createSlice({
 
 export const selectLastName = (state) => state.posts.lastPostName;
 export const selectPosts = (state) => state.posts.redditposts;
-
-
-
-
 
 
 export default postsSlice.reducer;
