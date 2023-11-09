@@ -5,14 +5,20 @@ import { requestPosts,
          selectLastName } from "./postsSlice";
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player-react/dist/controls.css';
-import { Box, Button as GrommetButton, Card } from 'grommet';
+import { Box, Button as GrommetButton, Card, Image, Anchor } from 'grommet';
 import PostCard from "./PostCard";
-import { Image } from "grommet";
+
 
 export default function User() {
     const dispatch = useDispatch();
     const lastPostName = useSelector(selectLastName);
     const posts = useSelector(selectPosts);
+
+
+    /* <Card name="Post" direction="column" justify="start" pad="xsmall" gap="none" margin={{"top": "medium"}} width="100%" key={post}>
+                    <h3>{posts[post].title}</h3>\
+                    <a target="blank" href={posts[post].url}>{posts[post].url}</a>
+                </Card>*/
 
     return (
         <>
@@ -23,20 +29,42 @@ export default function User() {
             <Box direction="column">{Object.keys(posts).map((post) => {
                 if(posts[post].type === 'image'){
                     return (
-                        <PostCard key={post} id={post} title={posts[post].title} content={<Image fit="cover" src={posts[post].url} />} />
+                        <PostCard 
+                            key={post}
+                            id={post}
+                            title={posts[post].title}
+                            content={<Image fit="contain" fill="vertical" src={posts[post].url} />} 
+                        />
                     )
                 }else if(posts[post].type === 'hosted:video') {
-                    return <Card name="Post" direction="column" justify="start" pad="xsmall" gap="none" margin={{"top": "medium"}} width="100%" key={post}>
-                    <h3>{posts[post].title}</h3>\
-                    <div style={{ margin: 'auto', height: 700, width: 400 }}>
-                        <ShakaPlayer height={700} muted={true} loop={true} autoPlay src={posts[post].video} />
-                    </div>
-                </Card>
+                    return (
+                        <PostCard
+                            key={post}
+                            id={post}
+                            title={posts[post].title}
+                            content={
+                                <Box direction="row" justify="center" align="center" fit="contain" fill="horizontal">
+                                    <div style={{width: 350}}>
+                                        <ShakaPlayer muted={true} loop={true} autoPlay src={posts[post].video} />
+                                    </div>
+                                </Box>
+                                }
+                        />
+                    )
                 }else if(posts[post].type === 'link'){
-                    return <Card name="Post" direction="column" justify="start" pad="xsmall" gap="none" margin={{"top": "medium"}} width="100%" key={post}>
-                    <h3>{posts[post].title}</h3>\
-                    <a target="blank" href={posts[post].url}>{posts[post].url}</a>
-                </Card>
+                    return (
+                        <PostCard
+                            key={post}
+                            id={post}
+                            title={posts[post.title]}
+                            content={
+                                <Box direction="row" align="start" justify="center" fit="contain" fill="horizontal">
+                                    <Anchor label={posts[post].url} href={posts[post].url} />
+                                    <Image fit="contain" src={posts[post].thumbnail} />
+                                </Box>
+                            }
+                        />
+                    )
                 }
                 return <Card name="Post" direction="column" justify="start" pad="xsmall" gap="none" margin={{"top": "medium"}} width="100%" key={post}>{posts[post].title}
                     {console.log("UNRECOGNIZED!!! :", posts[post])}
