@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+import { checkType, makeGallery } from '../../utilities/postsSlice_utilities';
 
 
 export const requestPosts = createAsyncThunk(
@@ -44,14 +44,15 @@ export const postsSlice = createSlice({
                     if(!child.data.post_hint){
                         console.log(child)
                     }
+                    const type = checkType(child.data);
                     state.redditposts = {
                         ...state.redditposts,
                         [child.data.id]:{
                             id: child.data.id,
-                            type: (child.data.post_hint) ? child.data.post_hint : null,
-                            video: (child.data.secure_media) ? child.data.secure_media.reddit_video.dash_url: null,
+                            type: type,
+                            video: (type === "hosted:video" || type === "rich:video" & child.data.secure_media) ? child.data.secure_media.reddit_video.dash_url: null,
+                            galleryData: (type === "gallery") ? makeGallery(child.data.gallery_data.items): null,
                             thumbnail: child.data.thumbnail,
-                            //media: (child.data.post_hint) ? (child.data.post_hint === 'image'|| child.data.post_hint === 'link') ? child.data.url : child.data.media.reddit_video.fallback_url : undefined , //image, link, rich-video
                             title: child.data.title,
                             author: child.data.author,
                             subreddit: child.data.subreddit_name_prefixed,

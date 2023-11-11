@@ -5,7 +5,7 @@ import { requestPosts,
          selectLastName } from "./postsSlice";
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player-react/dist/controls.css';
-import { Box, Button as GrommetButton, Card, Image, Anchor } from 'grommet';
+import { Box, Button as GrommetButton, Card, Image, Anchor, Grid, Carousel } from 'grommet';
 import PostCard from "./PostCard";
 
 
@@ -33,6 +33,8 @@ export default function User() {
                             key={post}
                             id={post}
                             title={posts[post].title}
+                            redditLink={posts[post].redditLink}
+                            height="large"
                             content={<Image fit="contain" fill="vertical" src={posts[post].url} />} 
                         />
                     )
@@ -42,6 +44,8 @@ export default function User() {
                             key={post}
                             id={post}
                             title={posts[post].title}
+                            redditLink={posts[post].redditLink}
+                            height="large"
                             content={
                                 <Box direction="row" justify="center" align="center" fit="contain" fill="horizontal">
                                     <div style={{width: 350}}>
@@ -56,18 +60,42 @@ export default function User() {
                         <PostCard
                             key={post}
                             id={post}
-                            title={posts[post.title]}
+                            title={posts[post].title}
+                            redditLink={posts[post].redditLink}
+                            height="medium"
                             content={
                                 <Box direction="row" align="start" justify="center" fit="contain" fill="horizontal">
-                                    <Anchor label={posts[post].url} href={posts[post].url} />
-                                    <Image fit="contain" src={posts[post].thumbnail} />
+                                    <Grid rows={["full"]} columns={["2/3", "1/3"]} >
+                                        <Box direction="row" align="center" justify="center" fit="contain" fill="horizontal" >
+                                            <Anchor size="small" label={posts[post].url} href={posts[post].url} />
+                                        </Box>
+                                        <Box round="xlarge" direction="row" align="center" justify="center" fit="contain" fill="horizontal">
+                                            <Image fit="cover" src={posts[post].thumbnail} />
+                                        </Box>
+                                    </Grid>
                                 </Box>
+                            }
+                        />
+                    )
+                }else if(posts[post].type === 'gallery'){
+                    return (
+                        <PostCard
+                            key={post}
+                            id={post}
+                            title={posts[post].title}
+                            redditLink={posts[post].redditLink}
+                            height="large"
+                            content={
+                                <Carousel>
+                                    {posts[post].galleryData.map((link) => {
+                                        return <Image key={link} fit="contain" fill="vertical" src={link} />
+                                    })}
+                                </Carousel>
                             }
                         />
                     )
                 }
                 return <Card name="Post" direction="column" justify="start" pad="xsmall" gap="none" margin={{"top": "medium"}} width="100%" key={post}>{posts[post].title}
-                    {console.log("UNRECOGNIZED!!! :", posts[post])}
                     <p style={{color: 'red'}}>UNRECOGNIZED POST</p><a target="blank" href={`https://reddit.com${posts[post].redditLink}`}>{posts[post].redditLink}</a>    
                 </Card>
             })
