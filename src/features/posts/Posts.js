@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { requestPosts, 
-         selectPosts, 
+         selectPosts,
          selectLastName } from "./postsSlice";
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player-react/dist/controls.css';
@@ -31,7 +31,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            post = {posts[post]}
+                            id={post}
                             height="large"
                             content={<Image fit="contain" fill="vertical" src={posts[post].url} />} 
                         />
@@ -40,7 +40,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            post = {posts[post]}
+                            id={post}
                             height="large"
                             content={
                                 <Box direction="row" justify="center" align="center" fit="contain" fill="horizontal">
@@ -55,7 +55,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            post = {posts[post]}
+                            id={post}
                             height="medium"
                             content={
                                 <Box direction="row" align="start" justify="center" fit="contain" fill="horizontal">
@@ -75,7 +75,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            post = {posts[post]}
+                            id={post}
                             height="large"
                             content={
                                 <Carousel>

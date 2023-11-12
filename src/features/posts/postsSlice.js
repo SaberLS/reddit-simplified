@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { checkType, makeGallery } from '../../utilities/postsSlice_utilities';
 
 
@@ -34,8 +34,7 @@ export const makeVote = createAsyncThunk(
             }
         })
         const response = await data.json();
-        console.log("response :", response);
-        console.log(response);
+        //console.log("response :", response);
     }
 )
 
@@ -48,6 +47,12 @@ export const postsSlice = createSlice({
         lastPostName: '',
         requestingToken: false,
         failedToGetToken: false
+    },
+    reducers: {
+        changeVote (state, {payload}) {
+            
+            state.redditposts[payload.id].vote_state = payload.vote;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -77,7 +82,7 @@ export const postsSlice = createSlice({
                             subreddit: child.data.subreddit_name_prefixed,
                             url: child.data.url,
                             redditLink: child.data.permalink,
-                            vote: 0
+                            vote_state: '0'
                         }
                     }
                 });
@@ -95,6 +100,15 @@ export const postsSlice = createSlice({
 
 export const selectLastName = (state) => state.posts.lastPostName;
 export const selectPosts = (state) => state.posts.redditposts;
+export const selectState = (state) => state.posts;
+const selectPostId = (state, postId) => postId;
 
+export const selectPostById = createSelector(
+    [selectState, selectPostId],
+    (posts, postId) => posts[postId]
+)
 
+export const {
+    changeVote
+} = postsSlice.actions;
 export default postsSlice.reducer;
