@@ -19,7 +19,7 @@ export function redirectToAuthCodeFlow() {
       params.append("state", verifier);
       params.append("redirect_uri", "http://127.0.0.1:3000/authorize_callback");
       params.append("duration", "permanent");
-      params.append("scope", "identity");
+      params.append("scope", "identity vote");
 
       document.location = `https://www.reddit.com/api/v1/authorize?${params.toString()}`;
   }
@@ -31,7 +31,7 @@ const checkVerifier = () => {
   //console.log("state: ", state);
   //console.log("verifier: ", verifier);
 
-  if(state===verifier){
+  if(state === verifier){
     //console.log("checkVerifier:", true);
     return true;
   }

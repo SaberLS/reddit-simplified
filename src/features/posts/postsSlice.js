@@ -2,20 +2,40 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { checkType, makeGallery } from '../../utilities/postsSlice_utilities';
 
 
+
 export const requestPosts = createAsyncThunk(
     'posts/requestPosts',
     async(lastName) => {
         let data = '';
 
         if(lastName === undefined){
-            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=1000`); 
+            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=100`); 
         }else {
-            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=1000&after=${lastName}`); 
+            data = await fetch(`https://www.reddit.com/r/popular/top/.json?limit=100&after=${lastName}`); 
         }
 
         const result = await data.json();
         console.log(result);
         return result;
+    }
+)
+
+export const makeVote = createAsyncThunk(
+    'posts/vote',
+    async({id, dir, accessToken}) => {
+        //console.log("id: ", id);
+        //console.log("dir: ", dir);
+        //console.log("accessToken: ", accessToken);
+    
+        const data = await fetch(`https://oauth.reddit.com/api/vote?id=${id}&dir=${dir}`,{
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        const response = await data.json();
+        console.log("response :", response);
+        console.log(response);
     }
 )
 
@@ -41,9 +61,8 @@ export const postsSlice = createSlice({
                 state.requestingToken = false;
                 state.failedToGetToken = false;
                 payload.data.children.forEach(child => {
-                    if(!child.data.post_hint){
-                        console.log(child)
-                    }
+                    console.log(child)
+
                     const type = checkType(child.data);
                     state.redditposts = {
                         ...state.redditposts,
@@ -51,20 +70,20 @@ export const postsSlice = createSlice({
                             id: child.data.id,
                             type: type,
                             video: (type === "hosted:video" || type === "rich:video" & child.data.secure_media) ? child.data.secure_media.reddit_video.dash_url: null,
-                            galleryData: (type === "gallery") ? makeGallery(child.data.gallery_data.items): null,
+                            galleryData: (type === "gallery") ? makeGallery(child.data.gallery_data.items, child.data.media_metadata): null,
                             thumbnail: child.data.thumbnail,
                             title: child.data.title,
                             author: child.data.author,
                             subreddit: child.data.subreddit_name_prefixed,
                             url: child.data.url,
-                            redditLink: child.data.permalink
+                            redditLink: child.data.permalink,
+                            vote: 0
                         }
                     }
                 });
                 const lastChild = payload.data.children[payload.data.children.length - 1];
                 console.log("last child :", lastChild);
                 state.lastPostName = lastChild.data.name;
-                console.log(state.post);
             })
             .addCase(requestPosts.rejected, (state) => {
                 state.requestingToken = false;

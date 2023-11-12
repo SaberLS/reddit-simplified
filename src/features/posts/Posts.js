@@ -29,11 +29,9 @@ export default function User() {
             <Box direction="column">{Object.keys(posts).map((post) => {
                 if(posts[post].type === 'image'){
                     return (
-                        <PostCard 
+                        <PostCard
                             key={post}
-                            id={post}
-                            title={posts[post].title}
-                            redditLink={posts[post].redditLink}
+                            post = {posts[post]}
                             height="large"
                             content={<Image fit="contain" fill="vertical" src={posts[post].url} />} 
                         />
@@ -42,14 +40,12 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            id={post}
-                            title={posts[post].title}
-                            redditLink={posts[post].redditLink}
+                            post = {posts[post]}
                             height="large"
                             content={
                                 <Box direction="row" justify="center" align="center" fit="contain" fill="horizontal">
                                     <div style={{width: 350}}>
-                                        <ShakaPlayer muted={true} loop={true} autoPlay src={posts[post].video} />
+                                        <ShakaPlayer muted={true} src={posts[post].video} />
                                     </div>
                                 </Box>
                                 }
@@ -59,9 +55,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            id={post}
-                            title={posts[post].title}
-                            redditLink={posts[post].redditLink}
+                            post = {posts[post]}
                             height="medium"
                             content={
                                 <Box direction="row" align="start" justify="center" fit="contain" fill="horizontal">
@@ -81,9 +75,7 @@ export default function User() {
                     return (
                         <PostCard
                             key={post}
-                            id={post}
-                            title={posts[post].title}
-                            redditLink={posts[post].redditLink}
+                            post = {posts[post]}
                             height="large"
                             content={
                                 <Carousel>

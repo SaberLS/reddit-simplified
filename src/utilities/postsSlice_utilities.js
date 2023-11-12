@@ -11,8 +11,16 @@ export const checkType = (child) => {
     return 'dunno';
 }
 
-export const makeGallery = (items) => {
+export const makeGallery = (items,meta_data) => {
     return items.map(item => {//https://i.redd.it/k8bsw0zzeizb1.jpg
+        if(meta_data[item.media_id].m === "image/png"){
+            return `https://i.redd.it/${item.media_id}.png`;
+        }else if (meta_data[item.media_id].m === "image/jpg"){
+            return `https://i.redd.it/${item.media_id}.jpg`;
+        }
+        console.log(meta_data[item.media_id]);
         return `https://i.redd.it/${item.media_id}.jpg`;
     })
 }
+
+
