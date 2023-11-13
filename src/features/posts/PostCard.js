@@ -25,7 +25,7 @@ export default function PostCard({ id, content, height }) {
 
     const vote = (e) => {
         var dir = e.currentTarget.value;
-
+        console.log(`${post.id} current vote: ${currentVote}`)
         if(currentVote === dir){
             dir = '0';
         }
@@ -36,15 +36,14 @@ export default function PostCard({ id, content, height }) {
 
     return (
         <Box align="center">
-            {console.log(`${post.id} current vote: ${currentVote}`)}
             <Card name="Post" direction="column" margin={{"top": "medium"}} height={height} width="large">
                 <CardHeader direction="row" justify="between" pad="small" align="center">
                     <Grid  height="xsmall" width="xxsmall">
                         <Box justify="center" align="center">
-                        <button style={buttonStyle} value='1' onClick={vote}><Ascending size="large"/></button>
+                        <button style={buttonStyle} value='1' onClick={vote}><Ascending color={(currentVote === "1") ? "accent-4" : "active"} size="large"/></button>
                         </Box>
                         <Box justify="center" align="center">
-                            <button style={buttonStyle} value='-1' onClick={vote}><Descending size="large"/></button>
+                            <button style={buttonStyle} value='-1' onClick={vote}><Descending color={(currentVote === "-1") ? "accent-1" : "active"} size="large"/></button>
                         </Box>
                     </Grid>
                     <Box onClick={ () => window.open(`https://reddit.com${post.redditLink}`)} justify="start" align="start" fill="horizontal" overflow="auto">
