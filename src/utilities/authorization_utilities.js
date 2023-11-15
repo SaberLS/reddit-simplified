@@ -22,7 +22,7 @@ export function redirectToAuthCodeFlow() {
   params.append("client_id", client_id);
   params.append("response_type", "code");
   params.append("state", verifier);
-  params.append("redirect_uri", "http://127.0.0.1:3000/authorize_callback");
+  params.append("redirect_uri", "https://6554b8b8ccf110000873204a--superlative-tapioca-e6d6d2.netlify.app/authorize_callback");
   params.append("duration", "permanent");
   params.append("scope", "identity vote");
 
@@ -48,7 +48,7 @@ export async function getAccessToken(code) {
     const params = new URLSearchParams();
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "http://127.0.0.1:3000/authorize_callback");
+    params.append("redirect_uri", "https://6554b8b8ccf110000873204a--superlative-tapioca-e6d6d2.netlify.app/authorize_callback");
 
     const credentials = Buffer.from(`${client_id}:${client_secret}`).toString(
       "base64"
