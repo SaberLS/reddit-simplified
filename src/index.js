@@ -1,20 +1,20 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './index.css';
-import { Grommet } from 'grommet';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "./index.css";
+import { Grommet } from "grommet";
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container);
 const theme = {
   global: {
     font: {
-      family: 'Roboto',
-      size: '14px',
-      height: '20px',
+      family: "Roboto",
+      size: "14px",
+      height: "20px",
     },
   },
 };
