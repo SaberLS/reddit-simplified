@@ -23,7 +23,7 @@ function App() {
         dispatch(requestToken(code));
       }
     }
-  }, []);
+  },);
 
   return (
     <div className="App">
