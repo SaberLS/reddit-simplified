@@ -33,7 +33,7 @@ export const makeVote = createAsyncThunk(
     //console.log("dir: ", dir);
     //console.log("accessToken: ", accessToken);
 
-    const data = await fetch(
+    await fetch(
       `https://oauth.reddit.com/api/vote?id=${id}&dir=${dir}`,
       {
         method: "POST",
